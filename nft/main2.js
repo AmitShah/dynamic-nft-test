@@ -23,7 +23,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const d = urlParams.get('id');
 let text = d+' BASED';
 const height = 0,
-	size = 180,
+	size = 120,
 	hover = 30,
 	curveSegments = 12,
 	bevelThickness = 2,
@@ -129,7 +129,7 @@ function init() {
 	const gtlfLoader = new GLTFLoader();
 	gtlfLoader.load(
 		// resource URL
-		'/scene.gltf',
+		'https://ipfs.io/ipfs/QmcBkhHhW32yXaSeiRJPuqQEgn6YAqSK8R7ZXnseGdKHQF/scene.glb',
 		// called when the resource is loaded
 		function ( gltf ) {
 			
