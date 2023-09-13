@@ -16,19 +16,19 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 let container;
 let camera, cameraTarget, scene, renderer,composer;
-let group, textMesh1, textMesh2, textGeo, material;
+let group, textMesh1, textMesh2, textGeo, material,textGeoBlock;
 let firstLetter = true;
 console.log( window.location);
 const urlParams = new URLSearchParams(window.location.search);
 const d = urlParams.get('id');
-let text = d+' BASED';
+let text = 'BASED';
 const height = 0,
 	size = 120,
 	hover = 30,
 	curveSegments = 12,
 	bevelThickness = 2,
 	bevelSize = 1;
-
+let blockText = 'V'+d+'.'+(urlParams.get("block") ?? "X");
 let font = null;
 const mirror = true;
 
@@ -87,6 +87,7 @@ function init() {
 	loader.load( 'https://ipfs.io/ipfs/QmVMrTSDbEHQJRf7rqcwjxxK6MMhb3q753PqnnnWfnPNwm/FREEFATFONT-Regular.ttf', function ( json ) {
 		font = new Font( json );
 		createText();
+		createBlockText();
 	} );
 
 	const plane = new THREE.Mesh(
@@ -125,7 +126,7 @@ function init() {
 
 	window.addEventListener( 'resize', onWindowResize );
 
-	// Load a glTF resource
+	//Load a glTF resource
 	const gtlfLoader = new GLTFLoader();
 	gtlfLoader.load(
 		// resource URL
@@ -166,8 +167,7 @@ function init() {
 
 			console.log( 'An error happened' );
 
-	}
-);
+	});
 
 }
 function gradientMaterial(){
@@ -280,6 +280,43 @@ function onDocumentKeyPress( event ) {
 
 }
 
+function createBlockText(){
+	textGeoBlock = new TextGeometry(blockText, {
+
+		font: font,
+
+		size: size/4,
+		height: height,
+		curveSegments: curveSegments,
+
+		bevelThickness: bevelThickness,
+		bevelSize: bevelSize/4,
+		bevelEnabled: false,
+		
+
+
+	} );
+
+	textGeoBlock.computeBoundingBox();
+	textGeoBlock.computeVertexNormals();
+
+	const centerOffset = - 0.5 * ( textGeoBlock.boundingBox.max.x - textGeoBlock.boundingBox.min.x );
+	const centerOffsetY = - 0.5 * ( textGeoBlock.boundingBox.max.y - textGeoBlock.boundingBox.min.y );
+	let material =  new THREE.MeshPhongMaterial( { color: 0xFFFF, flatShading: false,emissive: 0xC000FF, emissiveIntensity:.5} );
+	textMesh2 = new THREE.Mesh( textGeoBlock, material );
+	
+	
+	textMesh2.position.x = 2*centerOffset +.5 *(textGeo.boundingBox.max.x - textGeo.boundingBox.min.x);
+	textMesh2.position.y = centerOffsetY - size;
+	textMesh2.position.z = 250;
+	textMesh2.scale.set(1,2,1);
+	textMesh2.rotation.x = 0;
+	//textMesh1.scale.set(1,1.5,1);
+	//textMesh1.rotation.y = Math.PI * 2;
+
+	group.add( textMesh2 );
+}
+
 function createText() {
 
 	textGeo = new TextGeometry( text, {
@@ -315,22 +352,6 @@ function createText() {
 	//textMesh1.rotation.y = Math.PI * 2;
 
 	group.add( textMesh1 );
-
-	// if ( mirror ) {
-
-	// 	textMesh2 = new THREE.Mesh( textGeo, material );
-
-	// 	textMesh2.position.x = centerOffset;
-	// 	textMesh2.position.y = - hover;
-	// 	textMesh2.position.z = height;
-
-	// 	textMesh2.rotation.x = Math.PI;
-	// 	textMesh2.rotation.y = Math.PI * 2;
-
-	// 	group.add( textMesh2 );
-
-	// }
-
 }
 
 function refreshText() {

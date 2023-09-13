@@ -40,7 +40,7 @@ contract MyContract is ERC721Drop {
             '{',
                 '"name": "Chain Battles #', _tokenId.toString(), '",',
                 '"description": "Battles on chain",',
-                '"animation_url": "https://ipfs.io/ipfs/QmQfEe8BK3fY8XySU9QFG1vmZW3c4oWZ1r6K8iL6Fs6LMc/?id=',_tokenId.toString(),'&block=',b.toString(),'"',
+                '"animation_url": "https://ipfs.io/ipfs/bafybeib7hklxdue7xiies6lvtxw3qajezgkftiyiht7dhx4q3uj23iideq/?id=',_tokenId.toString(),'&block=',b.toString(),'"',
             '}'
         );
         
